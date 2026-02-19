@@ -1,6 +1,16 @@
 📋 Resumen General del Proyecto
 El objetivo es crear un detector de Fake News usando el modelo BERT. Lo especial de vuestro trabajo es el Ablation Study: demostrar si BERT es más listo analizando solo los titulares o analizando la noticia entera.
 
+En un proyecto de IA, los pasos suelen ser siempre los mismos y dependen el uno del otro. Los números marcan las etapas:
+
+01_EDA_WELFake.ipynb: Primero entiendo y limpio los datos (lo que acabas de hacer).
+
+02_Baseline.ipynb: Después establezco la marca a batir con el modelo simple.
+
+03_BERT_Training.ipynb: Luego entreno el modelo pesado.
+
+04_Evaluation.ipynb: Finalmente comparo todo y saco gráficas finales.
+
 Las fases son:
 
 Preprocesamiento: Limpiar el dataset WELFake y preparar los textos.
