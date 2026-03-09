@@ -54,3 +54,12 @@ def load_welfake(path: str) -> pd.DataFrame:
     df.drop(columns=['Serial', 'serial', 'None', 'none'], errors='ignore', inplace=True)
 
     return df[['title', 'text', 'label']]
+
+
+from src.data.loader import load_isot, load_welfake
+
+df_isot = load_isot("Project_IA/True.csv", "Project_IA/Fake.csv")
+df_isot.head()
+
+df_welfake = load_welfake("Project_IA/WELFake_Dataset.csv")
+df_welfake.head()
