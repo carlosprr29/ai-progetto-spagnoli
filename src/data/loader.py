@@ -1,3 +1,4 @@
+"Funciones para leer CSVs y unirlos"
 def load_isot(true_path: str, fake_path: str) -> pd.DataFrame:
     """
     Carga los CSV de ISOT (noticias reales y falsas) y devuelve un DataFrame unificado.
