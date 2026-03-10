@@ -1,0 +1,6 @@
+MODEL_NAME = "bert-base-uncased"
+NUM_EPOCHS = 3
+BATCH_SIZE = 16
+MAX_LENGTH = 256
+LEARNING_RATE = 5e-5
+TRAIN_OUTPUT_DIR = "./models"
