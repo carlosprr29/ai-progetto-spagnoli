@@ -26,3 +26,6 @@ def compute_metrics(pred):
     precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average="binary")
     acc = accuracy_score(labels, preds)
     return {"accuracy": acc, "f1": f1, "precision": precision, "recall": recall}
+
+from src.models.utils import set_seed
+set_seed(42)
