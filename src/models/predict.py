@@ -24,10 +24,13 @@ def predict_news(text, tokenizer, model):
     prob = float(probs[label])
     return label, prob
 
-from src.models.predict import predict_news
-from transformers import BertTokenizer, BertForSequenceClassification
 
-tokenizer = BertTokenizer.from_pretrained("models/bert_trained")
-model = BertForSequenceClassification.from_pretrained("models/bert_trained")
-label, prob = predict_news("El gobierno anuncia nueva reforma... contexto", tokenizer, model)
-print(f"Predicción: {'FAKE' if label==1 else 'REAL'}, prob={prob:.2%}")
+from src.models.predict import predict_news
+from src.models.train import train_model
+
+# Suponiendo que ya entrenamos o cargamos un modelo
+_, modelo, tokenizador = train_model(textos_train, textos_test, labels_train, labels_test)
+texto_nuevo = "Nuevo estudio confirma baja incidencia de X en pacientes..."
+label, prob = predict_news(texto_nuevo, tokenizador, modelo)
+print(f"Predicción: {label} (prob {prob:.2%})")
+
