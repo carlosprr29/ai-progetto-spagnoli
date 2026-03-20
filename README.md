@@ -1,39 +1,61 @@
-#  Fake News Detector Pro: BERT-Based Ablation Study
-Project Status: In Development 
-
+Fake News Detector Pro: BERT-Based Committee of Experts
+An Ablation Study on Temporal Decay and Semantic Depth (2016-2026)
 Authors: Carlos Padilla Ruano and Antonio José Osuna Montes
 
+📌 Project Description
+This project develops an advanced fake news classification system using BERT (Bidirectional Encoder Representations from Transformers). The core objective is to move beyond simple word-counting to understand contextual intent, comparing it against traditional Machine Learning baselines in the face of evolving misinformation.
 
-#  Project Description
-This project develops a fake news classification system based on the BERT (Bidirectional Encoder Representations from Transformers) language model. The primary objective is to conduct an ablation study to determine how training on different data sources influences performance and how accuracy varies when analyzing the headline only versus the full text.
+The Committee of Experts Architecture
+We implemented a triple-specialist system to analyze news from different angles:
 
-  # Training Architecture:
-  We have trained and compared three main systems:
-  
-    1. WELFake Model: Trained on a diverse web-based dataset (social media news, clickbait).
-    2. ISOT Model: Trained on official agency news (Reuters) and political disinformation sites.
-    3. Fusion (Master) Model: An integrated model that combines both datasets to improve generalization.
+WELFake Specialist: Trained on diverse web-based data (social media, clickbait).
 
-    
-#  Applied Methodology
-To mitigate common biases found in public datasets, we implemented:
-  - Bias Cleaning: 
-  Removal of agency headers (e.g., "Reuters", "Washington") and city names that provided artificial "clues" to the model.
-  - Data Augmentation:
-  Random sentence shuffling within the training set to ensure the AI learns contextual patterns rather than memorizing specific paragraphs.
-  - Thresholding System:
-  An interactive control that manages uncertainty by flagging news as "Doubtful/Inconclusive" if they do not meet a minimum percentage of confidence.
-  
-  
-#  Identified Issues & Critical Points
-Despite achieving high precision in validation metrics (Accuracy > 90%), real-world tests with news from February 2026 have revealed significant challenges:
-  1. The "Satire Wall": The ISOT model incorrectly classifies satirical news (e.g., The Onion) as "Real" because they perfectly mimic the formal style of a news agency.
-  2. Lack of World Knowledge: The system detects "how it is written" (form) but not "what is being said" (substance). It fails to identify logical absurdities if they are well-redacted.
-  3. Stylistic Bias: Real news using highly emotional language are sometimes flagged as Fake, while fake news written with a sober, professional tone successfully deceive the system.
+ISOT Specialist: Trained on formal agency news (Reuters) vs. political disinformation.
 
+Fusion (Master) Model: An integrated ensemble that combines both domains to maximize generalization.
 
-#  How to Run this Notebook
-1. Connect to Google Drive.
-2. Load the models from the paths specified in /Project_IA/.
-3. Use the Control Panel to test individual news items.
-4. Execute the Test Battery to view the triple comparative results.
+🛠️ Applied Methodology (Technical Rigor)
+To ensure the model learns semantics rather than shortcuts, we implemented:
+
+Bias Cleaning: Systematic removal of agency headers ("Reuters", "Washington") and location tags that provide artificial "clues".
+
+Data Augmentation: Random sentence shuffling to force the AI to learn context instead of memorizing fixed paragraph structures.
+
+Ablation Testing: A dual-mode analysis comparing Title-Only vs. Full-Text to identify the "Style Trap" in news reporting.
+
+🧪 Key Findings: The 2026 Battle
+Testing our models against real-world and synthetic news from February 2026 revealed three critical frontiers:
+
+1. The "Ablation Jump" (Self-Correction)
+BERT successfully uses body text to override sensationalist headline bias. In cases like 2026 Fusion Breakthroughs, while the Title-Only expert flagged it as FAKE (99%), the Full-Text analysis reached a near-perfect 99.9% REAL verdict, correcting the Baseline's failure.
+
+2. The Fact-Checking Paradox
+In the Pope Francis test, BERT correctly identified a debunking report as REAL (99%) by recognizing its formal journalistic structure and citations. The Baseline failed here, incorrectly flagging it as FAKE by only detecting "negative" keywords without understanding the intent.
+
+3. The "Satire Wall" & Linguistic Mimicry
+Our most significant discovery: high-quality satire (e.g., Lunar Snowfall) can deceive BERT because the model prioritizes authoritative rhetoric (form) over physical possibility (substance). If a lie is written with perfect NASA-style jargon, BERT's confidence in "REAL" remains dangerously high.
+
+4. The Fusion Paradox (Data Dilution)
+We discovered that the Fusion Model does not significantly outperform individual specialists. Combining datasets with conflicting styles (social media vs. formal agencies) can lead to "Domain Interference," proving that specialization is more effective than raw data volume.
+
+⚖️ Final Verdict: Efficiency vs. Depth
+The Baseline (Logistic Regression): An "Efficient Sentry." Excellent at catching obvious sensationalism at near-zero computational cost.
+
+BERT: The "Semantic Expert." Essential for validating complex truths and modern geopolitical events, though vulnerable to professional-grade mimicry.
+
+📂 Project Structure
+Plaintext
+├── notebooks/          # Google Colab experiments & scrapers
+├── src/                # Modular Source Code
+│   ├── data_loader.py  # Dataset ingestion (WELFake/ISOT)
+│   ├── preprocessing.py# Bias cleaning & tokenization
+│   ├── models.py       # Committee of Experts logic
+│   └── testing.py      # Ablation & 2026 test battery
+├── requirements.txt    # Dependencies (transformers, torch, sklearn)
+└── README.md           # Documentation
+🚀 How to Run
+Environment: Connect to Google Colab and mount your Drive.
+
+Dependencies: Install via pip install -r requirements.txt.
+
+Execution: Use the Control Panel in the main notebook to test individual news items or run the full Ablation Test Battery.
