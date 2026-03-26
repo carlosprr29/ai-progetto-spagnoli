@@ -16,7 +16,7 @@ def load_and_clean_welfake():
     Fetches, cleans, and tags WELFake from Hugging Face.
     """
     print(" Loading WELFake from Hugging Face...")
-    hf_dataset = load_dataset("search67/WELFake", split='train')
+    hf_dataset = load_dataset("davanstrien/WELFake", split='train')
     df = hf_dataset.to_pandas()
     
     # 1. Clean nulls and duplicates
