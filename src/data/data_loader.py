@@ -48,6 +48,20 @@ def load_datasets(base_path):
         
     return data
 
+def clean_dataframe(df, name="Dataset"):
+    """
+    Helper function to remove nulls and duplicates.
+    """
+    initial_len = len(df)
+    # 1. Drop rows with missing essential values
+    df = df.dropna(subset=['title', 'text', 'label'])
+    # 2. Remove exact duplicates
+    df = df.drop_duplicates().reset_index(drop=True)
+    
+    final_len = len(df)
+    print(f" {name} cleaned: Removed {initial_len - final_len} rows (nulls/duplicates).")
+    return df
+
 def prepare_fusion_dataset(data):
     """
     Combines WELFake and ISOT into a single master dataset for the Fusion model.
