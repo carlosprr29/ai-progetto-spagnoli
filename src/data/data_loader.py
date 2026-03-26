@@ -18,14 +18,15 @@ def load_and_clean_welfake():
     print(" Loading WELFake from Hugging Face...")
     hf_dataset = load_dataset("davanstrien/WELFake", split='train')
     df = hf_dataset.to_pandas()
-    
+
     # 1. Clean nulls and duplicates
+    df['title'] = df['title'].fillna('No Title')
     df = df.dropna(subset=['text', 'label']).drop_duplicates()
-    
+
     # 2. Select columns and add source tag
-    df_sub = df[['text', 'label']].copy()
+    df_sub = df[['title', 'text', 'label']].copy()
     df_sub['source'] = 'WELFake'
-    
+
     print(f"✅ WELFake loaded and tagged: {len(df_sub)} rows.")
     return df_sub
 
