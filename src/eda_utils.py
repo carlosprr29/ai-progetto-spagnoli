@@ -4,24 +4,24 @@ from wordcloud import WordCloud
 import pandas as pd
 
 def plot_class_balance(df):
-    """Generates a bar chart to visualize the distribution of Real vs Fake news."""
+    """Generates a bar chart to visualize the distribution of True vs Fake news."""
     print("\n--- Generating class balance chart ---")
     plt.figure(figsize=(7, 5))
     # Standardizing labels for the plot
     plot_df = df.copy()
-    plot_df['Label'] = plot_df['label'].map({0: 'Real', 1: 'Fake'})
+    plot_df['Label'] = plot_df['label'].map({0: 'True', 1: 'Fake'})
     
     sns.countplot(data=plot_df, x='Label', palette='viridis')
-    plt.title('Dataset Distribution (0: Real, 1: Fake)', fontsize=14)
+    plt.title('Dataset Distribution (0: True, 1: Fake)', fontsize=14)
     plt.ylabel('Count')
     plt.xlabel('Category')
     plt.show()
 
 def generate_cloud(df, news_label, text_col='title', colour_map='viridis', graph_title='Word Cloud'):
     """
-    Generates word clouds based on the news label (Real or Fake).
+    Generates word clouds based on the news label (True or Fake).
     """
-    print(f"\n--- Generating Word Cloud for {'Fake' if news_label==1 else 'Real'} news ---")
+    print(f"\n--- Generating Word Cloud for {'Fake' if news_label==1 else 'True'} news ---")
     
     # Filtering the text and joining all rows into a single string
     text = " ".join(df[df['label'] == news_label][text_col].astype(str))
@@ -50,7 +50,7 @@ def analyse_term(df, term, col='title'):
         count = filtered_df['label'].value_counts(normalize=True) * 100
         dist_dict = count.to_dict()
         # Clean dictionary mapping for display
-        friendly_dist = {('Fake' if k==1 else 'Real'): f"{v:.2f}%" for k, v in dist_dict.items()}
+        friendly_dist = {('Fake' if k==1 else 'True'): f"{v:.2f}%" for k, v in dist_dict.items()}
         
         print(f"Term '{term}' found in {len(filtered_df)} {col}s.")
         print(f"   ↳ Distribution: {friendly_dist}")
@@ -59,14 +59,14 @@ def analyse_term(df, term, col='title'):
 
 def plot_text_length(df, column='text', bins=100, max_chars=5000):
     """
-    Plots a histogram comparing text length between Real and Fake news.
+    Plots a histogram comparing text length between True and Fake news.
     """
     print(f"\n--- Analyzing {column} length distribution ---")
     
     # Use a temporary DataFrame to avoid modifying the original one
     temp_df = df.copy()
     temp_df['temp_len'] = temp_df[column].apply(len)
-    temp_df['Category'] = temp_df['label'].map({0: 'Real', 1: 'Fake'})
+    temp_df['Category'] = temp_df['label'].map({0: 'True', 1: 'Fake'})
 
     plt.figure(figsize=(12, 6))
     sns.histplot(
@@ -78,7 +78,7 @@ def plot_text_length(df, column='text', bins=100, max_chars=5000):
         palette='magma'
     )
     
-    plt.title(f'Text Length Comparison: Real vs Fake ({column.capitalize()})', fontsize=14)
+    plt.title(f'Text Length Comparison: True vs Fake ({column.capitalize()})', fontsize=14)
     plt.xlabel('Number of characters')
     plt.ylabel('Frequency')
     plt.xlim(0, max_chars) 

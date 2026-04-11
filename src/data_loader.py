@@ -59,7 +59,7 @@ def load_and_clean_isot(base_path):
     df_true = pd.read_csv(path_true)
     df_fake = pd.read_csv(path_fake)
     
-    # Standardizing labels: 0 = REAL, 1 = FAKE
+    # Standardizing labels: 0 = TRUE, 1 = FAKE
     df_true['label'] = 0
     df_fake['label'] = 1
     df_isot = pd.concat([df_true, df_fake])
