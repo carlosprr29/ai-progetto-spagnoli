@@ -3,26 +3,27 @@ import seaborn as sns
 from wordcloud import WordCloud
 import pandas as pd
 
-def plot_class_balance(df, target_col='label'):
-    print("\n Generating class balance chart...")
+def plot_class_balance(df):
+    """Generates a bar chart to visualize the distribution of Real vs Fake news."""
+    print("\n--- Generating class balance chart ---")
     plt.figure(figsize=(7, 5))
-    sns.countplot(data=df, x='label', palette='viridis')
-    plt.title('News Distribution (0: Real, 1: Fake)')
-    plt.xticks([0, 1], ['Real', 'Fake'])
+    # Standardizing labels for the plot
+    plot_df = df.copy()
+    plot_df['Label'] = plot_df['label'].map({0: 'Real', 1: 'Fake'})
+    
+    sns.countplot(data=plot_df, x='Label', palette='viridis')
+    plt.title('Dataset Distribution (0: Real, 1: Fake)', fontsize=14)
+    plt.ylabel('Count')
+    plt.xlabel('Category')
     plt.show()
 
 def generate_cloud(df, news_label, text_col='title', colour_map='viridis', graph_title='Word Cloud'):
     """
-    Generates word clouds based on the news label.
-    Args:
-        df: DataFrame
-        news_label: 0 (Real) or 1 (Fake)
-        text_col: Column to analyze (usually 'title' or 'text')
-        colour_map: Matplotlib colormap (e.g., 'Greens', 'Reds')
-        graph_title: Title for the plot
+    Generates word clouds based on the news label (Real or Fake).
     """
-    # Filtering the text based on the label (0 or 1)
-    # We use 'label' here because that's the column name in your WELFake dataset
+    print(f"\n--- Generating Word Cloud for {'Fake' if news_label==1 else 'Real'} news ---")
+    
+    # Filtering the text and joining all rows into a single string
     text = " ".join(df[df['label'] == news_label][text_col].astype(str))
     
     # Initialize WordCloud
@@ -37,74 +38,67 @@ def generate_cloud(df, news_label, text_col='title', colour_map='viridis', graph
     # Plotting
     plt.figure(figsize=(10, 5))
     plt.imshow(wc, interpolation='bilinear')
-    plt.title(graph_title, fontsize=16)
+    plt.title(graph_title, fontsize=16, fontweight='bold')
     plt.axis('off')
     plt.show()
 
 def analyse_term(df, term, col='title'):
+    """Analyzes how many times a specific term appears and its distribution across labels."""
     filtered_df = df[df[col].str.contains(term, case=False, na=False)]
     
     if not filtered_df.empty:
         count = filtered_df['label'].value_counts(normalize=True) * 100
-        
         dist_dict = count.to_dict()
+        # Clean dictionary mapping for display
+        friendly_dist = {('Fake' if k==1 else 'Real'): f"{v:.2f}%" for k, v in dist_dict.items()}
         
-        print(f"The term '{term}' appears in {len(filtered_df)} {col}s. Distribution: {dist_dict}")
+        print(f"Term '{term}' found in {len(filtered_df)} {col}s.")
+        print(f"   ↳ Distribution: {friendly_dist}")
     else:
-        print(f"The term '{term}' was not found in {col}.")
-        
-        
+        print(f"Term '{term}' was not found in {col}.")
 
 def plot_text_length(df, column='text', bins=100, max_chars=5000):
     """
-    Plots a histogram comparing the length of texts between Real and Fake news.
-    
-    Args:
-        df (pd.DataFrame): The dataset containing the news.
-        column (str): The column to analyze (default is 'text').
-        bins (int): Number of bins for the histogram.
-        max_chars (int): The x-axis limit (texts are much longer than titles).
+    Plots a histogram comparing text length between Real and Fake news.
     """
-    print(f"\n Analysing {column} length...")
+    print(f"\n--- Analyzing {column} length distribution ---")
     
-    # Creamos la columna temporal de longitud
+    # Use a temporary DataFrame to avoid modifying the original one
     temp_df = df.copy()
-    df['temp_len'] = df[column].apply(len)
-
-    temp_df['label_name'] = temp_df['label'].map({0: 'Real', 1: 'Fake'})    
+    temp_df['temp_len'] = temp_df[column].apply(len)
+    temp_df['Category'] = temp_df['label'].map({0: 'Real', 1: 'Fake'})
 
     plt.figure(figsize=(12, 6))
     sns.histplot(
-        data=df[df['temp_len'] <= max_chars], # Filtramos aquí para que el KDE sea preciso
+        data=temp_df[temp_df['temp_len'] <= max_chars],
         x='temp_len', 
-        hue='label', 
+        hue='Category', # Use the mapped names for the legend
         kde=True, 
         bins=bins, 
         palette='magma'
     )
     
-    plt.title(f'Comparison of {column.capitalize()} Length: Real vs Fake')
+    plt.title(f'Text Length Comparison: Real vs Fake ({column.capitalize()})', fontsize=14)
     plt.xlabel('Number of characters')
     plt.ylabel('Frequency')
     plt.xlim(0, max_chars) 
-     
     plt.show()
-    
-    # Borramos la columna temporal
-    df.drop(columns=['temp_len'], inplace=True)
     
 def plot_ablation_results(trainer_tit, trainer_full):
     """
-    Generates a comparison plot between Titles Only and Full Content models
-    using the evaluation accuracy stored in the Trainer log history.
+    Compares the impact of semantic context (Titles vs Full Content) 
+    using BERT's evaluation accuracy.
     """
+    print("\n--- Generating final ablation study comparison ---")
 
-    print("Generating final ablation comparison...")
-
-    # Extract accuracy from trainer logs
-    res_tit = trainer_tit.state.log_history[-2].get('eval_accuracy')
-    res_full = trainer_full.state.log_history[-2].get('eval_accuracy')
-
+    # Extract accuracy from trainer logs. 
+    # Usually -1 is the summary, -2 is the last evaluation before finish
+    try:
+        res_tit = next(item['eval_accuracy'] for item in reversed(trainer_tit.state.log_history) if 'eval_accuracy' in item)
+        res_full = next(item['eval_accuracy'] for item in reversed(trainer_full.state.log_history) if 'eval_accuracy' in item)
+    except Exception as e:
+        print(f"⚠️ Error extracting metrics: {e}. Check if training finished correctly.")
+        return
 
     # Create visualization
     plt.figure(figsize=(9, 6))
@@ -112,7 +106,7 @@ def plot_ablation_results(trainer_tit, trainer_full):
     bars = plt.bar(['Titles Only', 'Full Content'], [res_tit, res_full], color=colors)
 
     # Styling
-    plt.ylim(0.85, 1.0)
+    plt.ylim(0.80, 1.0) # Starting from 80% to highlight the difference
     plt.ylabel('Accuracy Score', fontsize=12)
     plt.title('BERT Ablation Study: Impact of Semantic Context on Detection', fontsize=14, fontweight='bold')
 
@@ -126,8 +120,5 @@ def plot_ablation_results(trainer_tit, trainer_full):
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.show()
 
-    print(f"Comparison complete: Full context improves accuracy by {(res_full - res_tit)*100:.2f}%")
-
-
-    
-    
+    improvement = (res_full - res_tit) * 100
+    print(f"Ablation complete: Full context yields a {improvement:.2f}% accuracy gain.")

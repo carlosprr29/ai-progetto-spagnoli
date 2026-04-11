@@ -7,24 +7,24 @@ def clean_text_comprehensive(text, is_title=False):
     if not isinstance(text, str) or text.strip() == "": 
         return "no content"
 
-    # A. Datelines & Headers: SOLO para el cuerpo (text), NO para títulos
-    # Así evitamos cargaros títulos como "Pence: My story"
+    # A. Datelines & Headers: ONLY for the body (text), NOT for titles
+    # This prevents removing context from titles like "Pence: My story"
     if not is_title:
         text = re.sub(r'^[^-:]*[-:]\s*', '', text)
 
-    # B. Web Noise (URLs y menciones) - Esto sí va en ambos
+    # B. Web Noise (URLs y menciones) - Applied to both
     text = re.sub(r'https?://\S+|www\.\S+', '', text)
     text = re.sub(r'@\S+', '', text)
 
-    # C. Agency De-biasing (Neutralizar marcas) - Esto sí va en ambos
+    # C. Agency De-biasing (Neutralizar marcas) - Applied to both
     marcas = r'\b(Reuters|Breitbart|InfoWars|CNN|Fox News|BBC|Associated Press|AP|RT|Sputnik)\b'
     text = re.sub(marcas, 'the news outlet', text, flags=re.IGNORECASE)
 
-    # D. End of text signatures (Solo suele estar en el texto)
+    # D. End of text signatures (Only usually in the text)
     if not is_title:
         text = re.sub(r'(?i)read more|source\s*[:\-].*', '', text)
 
-    # E. Normalization: Minúsculas solo para títulos (para evitar el sesgo de GRITAR)
+    # E. Normalization: Lowercase for text, but keep titles as they are for potential capitalization cues
     if is_title:
         text = text.lower()
 
