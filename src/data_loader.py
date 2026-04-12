@@ -24,7 +24,11 @@ def clean_text_comprehensive(text, is_title=False):
     if not is_title:
         text = re.sub(r'(?i)read more|source\s*[:\-].*', '', text)
 
-    # E. Normalization: Lowercase for text, but keep titles as they are for potential capitalization cues
+    # E. Multimedia Noise: Delete (video), [video], (images), [tweets], etc.
+    # This regex search everything that start in ( o [ y termine por ) o ]
+    text = re.sub(r'[\(\[][^\]\)]*[\)\]]', '', text)
+    
+    # F. Normalization: Lowercase for text, but keep titles as they are for potential capitalization cues
     if is_title:
         text = text.lower()
 
@@ -59,7 +63,7 @@ def load_and_clean_isot(base_path):
     df_true = pd.read_csv(path_true)
     df_fake = pd.read_csv(path_fake)
     
-    # Standardizing labels: 0 = TRUE, 1 = FAKE
+    # Standardizing labels: 0 = REAL, 1 = FAKE
     df_true['label'] = 0
     df_fake['label'] = 1
     df_isot = pd.concat([df_true, df_fake])
