@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os 
 from scipy.special import softmax
 from transformers import BertTokenizer, BertForSequenceClassification
 
@@ -10,14 +11,16 @@ def load_committee_models():
     """Loads all fine-tuned BERT models and returns a dictionary of experts."""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+    base_path = os.path.join(os.getcwd(), "models")
+
     # Mapping models to compare "Title Experts" vs "Full Experts"
     paths = {
-        "WELFake (Titles)": "/content/drive/MyDrive/Project_IA/model_WELFake_titles",
-        "WELFake (Full)":   "/content/drive/MyDrive/Project_IA/model_WELFake_full",
-        "ISOT (Titles)":    "/content/drive/MyDrive/Project_IA/model_ISOT_titles",
-        "ISOT (Full)":      "/content/drive/MyDrive/Project_IA/model_ISOT_full",
-        "Fusion (Titles)":  "/content/drive/MyDrive/Project_IA/model_fusion_titles",
-        "Fusion (Full)":    "/content/drive/MyDrive/Project_IA/model_fusion_full"
+        "WELFake (Titles)": os.path.join(base_path, "model_WELFake_titles"),
+        "WELFake (Full)":   os.path.join(base_path, "model_WELFake_full"),
+        "ISOT (Titles)":    os.path.join(base_path, "model_ISOT_titles"),
+        "ISOT (Full)":      os.path.join(base_path, "model_ISOT_full"),
+        "Fusion (Titles)":  os.path.join(base_path, "model_fusion_titles"),
+        "Fusion (Full)":    os.path.join(base_path, "model_fusion_full")
     }
 
     print("🚀 Loading BERT Committee of Experts... This may take a few minutes.")
