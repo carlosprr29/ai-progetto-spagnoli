@@ -53,6 +53,7 @@ def load_and_clean_welfake():
 
 def load_and_clean_isot(base_path):
     """Loads, cleans bias, and tags ISOT from local CSVs."""
+    base_path = os.getcwd()
     path_true = os.path.join(base_path, 'data', 'True.csv')
     path_fake = os.path.join(base_path, 'data', 'Fake.csv')
     
