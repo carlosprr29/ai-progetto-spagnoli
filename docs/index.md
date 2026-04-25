@@ -9,8 +9,8 @@
 
 ### Proposed Solution
 * **Approach:** A **Hybrid Committee of Experts** using **BERT (Transformers)**, compared against a traditional Machine Learning Baseline.
-* **Computational Challenges:** Managing the high resource demand of BERT. We transitioned from "brute-force" training to **stratified sampling**, reducing training time from hours to minutes while maintaining statistical integrity.
-* **Summary of Results:** The **Hybrid Expert** achieved a **97.1% accuracy**. While BERT shows superior contextual intelligence, the choice of dataset (WELFake) proved vital to maintaining a skeptical edge.
+* **Computational Challenges:** Transitioned from "brute-force" training to **stratified sampling in Google Colab**, reducing training time from hours to minutes while maintaining statistical integrity.
+* **Summary of Results:** The **Hybrid Expert** achieved a **97.1% accuracy**. BERT demonstrated a superior "Temporal Resilience" compared to the Baseline.
 
 ---
 
@@ -25,32 +25,31 @@
 ## 3. Experimental Results
 
 ### Demonstration and Technologies
-* **Environment:** Google Colab with GPU acceleration (T4/A100).
+* **Environment:** Google Colab with GPU acceleration (T4).
 * **Stack:** Python, PyTorch, Hugging Face Transformers.
 * **Reproducibility:** Stratified sampling of 10,000 samples per dataset to ensure balanced and efficient fine-tuning.
 
 ### Results
-* **Best Configuration:** The **Master Fusion Model** (ISOT + WELFake) provided the most stable results with **97.1% Accuracy**.
-* **Ablation Study:** * **ISOT Expert:** Near-perfect on formal news (99.6%) but vulnerable to sophisticated fakes.
-    * **WELFake Expert:** More resilient against "high-quality" disinformation.
-    * **Full Context vs. Title:** Accuracy consistently increased by ~3-5% when the model had access to the full body text.
+* **The "Ablation Jump":** Accuracy consistently increased by ~3-5% when the model had access to the full body text, proving BERT's ability to override headline bias through contextual analysis.
+* **Specialist Performance:**
+    * **ISOT Expert:** Near-perfect on formal news (99.6%) but vulnerable to sophisticated, well-written fakes.
+    * **WELFake Expert:** The most resilient specialist, providing a superior defense against "high-quality" disinformation and satire.
 
 ---
 
 ## 4. Discussion and Conclusions
 
 ### Results Discussion
-BERT outperformed the Baseline in **contextual rectification**. In cases like the 2026 Fusion Breakthrough, BERT flipped a "FAKE" title label to a "TRUE" verdict (99.9%) by recognizing the institutional tone of the body, whereas the Baseline remained biased by the "future" vocabulary.
+Our "2026 Stress Test" revealed a critical divide. The **Baseline model suffered a total collapse** when facing the **2026 Nuclear Fusion breakthrough**, labeling it as **FAKE (94% confidence)** due to the "Knowledge Cutoff". However, **BERT successfully identified the news as TRUE (99.9%)**. This proves that semantic depth allows BERT to recognize professional journalistic standards even when the topic is outside its original training window.
 
 ### Method Validity
-The hybrid approach is highly valid. By combining ISOT and WELFake, we mitigated the "style bias" of individual datasets. However, we discovered that **WELFake is the superior training source** for preventing "blind trust" in well-written but false news.
+The hybrid approach is highly valid. By combining ISOT and WELFake, we mitigated the "style bias" of individual datasets. **WELFake** emerged as the superior training source for developing a "healthy skepticism" against authoritative-sounding disinformation.
 
 ### Limitations and Maturity
-* **Over-Sophistication:** BERT can be "tricked" by high-quality pseudo-science (e.g., the Lunar Snowfall case) because it prioritizes structural perfection over scientific laws.
-* **Bias:** The model remains slightly influenced by historical data associations (e.g., "Trump" in titles).
-* **Maturity:** The system is a functional prototype (TRL 4) ready for integration into multi-layered verification pipelines.
+* **Institutional Mimicry:** While resilient to temporal drift, BERT can still be "tricked" by high-quality satire (e.g., the **Lunar Snowfall** case) if the prose perfectly mimics scientific jargon.
+* **Maturity:** The system is a functional prototype (**TRL 4**) ready for integration into real-world verification pipelines.
 
 ### Future Works
-* **Fact-Checking Integration:** Connecting the model to real-time Knowledge Graphs (API-based fact-checking).
-* **Multilingual Expansion:** Testing the Hybrid Expert's resilience in different languages.
-* **Adversarial Training:** Specifically training on "High-Level Deepfakes" to close the gap in scientific disinformation detection.
+* **RAG Integration:** Connecting the model to real-time fact-checking (Knowledge Graphs) to verify physical facts alongside stylistic analysis.
+* **User Interface:** Deploying the model into a practical application accessible to any citizen.
+
