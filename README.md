@@ -15,29 +15,30 @@ We implemented a **Triple-Specialist Ensemble** to analyze news through differen
 ---
 
 ## 🛠️ Applied Methodology (Technical Rigor)
-To ensure the model prioritizes **semantics** over **structural shortcuts**, we implemented:
 
-* **Source De-biasing:** Systematic removal of agency headers ("Reuters", "Washington") and metadata tags that act as artificial proxies for truth.
-* **Linguistic Data Augmentation:** Strategies to force the AI to learn deep context rather than memorizing fixed paragraph distributions.
-* **Ablation Framework:** A dual-input analysis comparing **Title-Only vs. Full-Text** to identify the "Style Trap" in modern reporting.
-* **Stratified Efficiency:** Implementation of stratified sampling to reduce training latency from hours to minutes without sacrificing statistical significance.
+To ensure the system moves beyond **"counting words"** and focuses on **"understanding stories,"** our methodology follows three strategic pillars designed to maximize semantic depth:
+
+* **Semantic De-biasing:** We implemented a systematic removal of agency headers (e.g., "Reuters", "Washington") and metadata tags. This forces BERT to ignore "structural shortcuts" and focus purely on the **linguistic intent** and **narrative style** of the news, preventing the model from simply memorizing source names.
+* **Ablation & Contextual Framework:** We developed a dual-input analysis comparing **Title-Only vs. Full-Text**. This allows the model to avoid the **"Style Trap"**—where a sensationalist headline might trigger a false positive—by allowing BERT to "rectify" its judgment through the analysis of the body text.
+* **Execution & Scalability (Google Colab):** All experiments were conducted within a **Google Colab environment** using **Stratified Sampling**. This allowed us to reduce training latency from hours to minutes without losing statistical significance, enabling rapid stress-testing across both **2016 and 2026 news cycles**.
 
 ---
 
 ## 🧪 Key Findings: The 2026 Frontier
-Testing our models against real-world and synthetic news from **February 2026** revealed four critical frontiers in NLP:
+
+Testing our models against real-world news from **2016 and February 2026** within our **Google Colab environment** revealed four critical insights into modern NLP:
 
 ### 1. The "Ablation Jump" (Contextual Rectification)
-BERT demonstrates a superior ability to override headline bias. In cases like the **2026 Fusion Breakthrough**, while the *Title-Only* mode flagged the news as **FAKE (99%)**, the **Full-Context** analysis reached a **99.9% TRUE** verdict, successfully identifying the professional coherence of the body text.
+BERT demonstrates a superior ability to override headline bias. In various test cases, while the **Title-Only** mode flagged news as **FAKE** due to sensationalist headers, the **Full-Context** analysis successfully "rectified" the verdict to **TRUE**, proving that the model uses the body text to validate or debunk the headline.
 
-### 2. The Fact-Checking Paradox
-In complex "debunking" reports (e.g., Pope Francis tests), BERT correctly identified the text as **TRUE (99%)** by recognizing its formal journalistic structure and citations. Traditional Baselines failed here, flagging the content as FAKE by only detecting "negative" keywords without understanding the intent.
+### 2. The Temporal Drift (Baseline vs. BERT)
+Our stress tests revealed a massive gap in temporal resilience. The **Baseline model** suffered a total collapse when facing the **2026 Nuclear Fusion breakthrough**, labeling this true story as **FAKE with 94% confidence**. This proves that frequency-based models (BoW/TF-IDF) are "trapped" in their training year. In contrast, **BERT-based models** successfully identified the news as **TRUE**, proving that semantic understanding is far more effective than simple keyword matching when facing future events.
 
 ### 3. The "Satire Wall" & Linguistic Mimicry
-Our most significant discovery: **High-quality satire can "hack" BERT.** If a lie is written with perfect institutional jargon (e.g., NASA-style prose), BERT prioritizes **Authoritative Rhetoric (Form)** over **Physical Possibility (Substance)**, maintaining a dangerously high confidence in false reports.
+Even the most advanced models have limits. We discovered that high-quality satire can "hack" BERT's logic. When a false story is written with perfect institutional jargon (e.g., the **"Lunar Snowfall"** case), the **Hybrid Fusion** model prioritized **Authoritative Rhetoric (Form)** over **Physical Possibility (Substance)** and failed. 
 
-### 4. The Fusion Paradox (Domain Interference)
-We discovered that the **WELFake Specialist** often provides more resilient defenses than the Fusion Model. Combining datasets with conflicting styles (social media vs. formal agencies) can lead to **"Domain Interference"**, suggesting that specialization is often more effective than raw data volume.
+### 4. The WELFake Resilience (The Ultimate Expert)
+The most significant finding of this project was the absolute robustness of the **WELFake Specialist**. While the Baseline failed the 2026 test and the Fusion model failed the Satire test, **WELFake correctly identified 100% of the cases** in our Google Colab environment. This suggests that training on diverse, "noisy" digital data creates a superior form of skepticism, making it our most reliable defense against professionalized disinformation.
 
 ---
 
@@ -47,8 +48,9 @@ We discovered that the **WELFake Specialist** often provides more resilient defe
 | :--- | :--- | :--- |
 | **Computational Cost** | Ultra-Low (Efficient Sentry) | High (Requires GPU Acceleration) |
 | **Detection Logic** | Keyword & Pattern Recognition | Semantic & Structural Analysis |
-| **Best Performance** | Catching obvious sensationalism | Validating complex, professional-grade news |
-| **Weakness** | High False Positive rate in 2026 news | Vulnerable to "Institutional Mimicry" |
+| **Best Performance** | Catching obvious, low-quality fake news | Validating complex, professional-grade news |
+| **Temporal Resilience** | **Fails in 2026 tests** (Knowledge Cutoff) | **Success in 2026 tests** (Semantic Depth) |
+| **Core Weakness** | High False Positive rate in modern news | Vulnerable to "Institutional Mimicry" (Satire) |
 
 ---
 
@@ -56,6 +58,7 @@ We discovered that the **WELFake Specialist** often provides more resilient defe
 
 ```plaintext
 ├── docs/                # Project documentation
+│   └── MEMORIA.pdf      # Documentation of the project
 │   └── index.md         # Documentation entry point
 ├── models/              # Saved model weights and checkpoints
 ├── notebooks/           # Research and development workflow
@@ -71,9 +74,13 @@ We discovered that the **WELFake Specialist** often provides more resilient defe
 │   ├── data_loader.py   # Stratified ingestion (WELFake/ISOT)
 │   ├── eda_utils.py     # Helper functions for data visualization
 │   ├── evaluation.py    # Performance metrics and Ablation logic
-│   ├── main.py          # Execution entry point
 │   └── modelling.py     # Committee of Experts & BERT architecture
 ├── .gitignore           # Files excluded from version control
 ├── LICENSE              # Project licensing information
 ├── README.md            # Main project documentation
-└── requirements.txt     # Python dependencies (Transformers, Torch, etc.)
+└── requirements.txt     # Python dependencies
+
+> ⚠️ **Note on Model Weights:** Due to GitHub's file size limitations, the trained weights for the **WELFake**, **ISOT**, and **Hybrid Fusion** models are hosted on Google Drive. 
+> 
+> 🔗 **[Access Trained Models Here](https://drive.google.com/drive/folders/17rkrKPKLdCeyllKBnYh1QMlE8Q3CcFMQ?usp=sharing)**
+> 
