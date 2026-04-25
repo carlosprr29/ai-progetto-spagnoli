@@ -55,6 +55,11 @@ The most significant finding of this project was the absolute robustness of the 
 ---
 
 ## 📂 Project Structure
+> ⚠️ **Note on Model Weights**
+>
+> Due to GitHub's file size limitations, all trained model weights are hosted on Google Drive and linked within the `models/` directory for direct use.
+>
+> 🔗 [Access Trained Models Here](https://drive.google.com/drive/folders/17rkrKPKLdCeyllKBnYh1QMlE8Q3CcFMQ?usp=sharing)
 
 ```plaintext
 ├── docs/                # Project documentation
@@ -80,7 +85,8 @@ The most significant finding of this project was the absolute robustness of the 
 ├── README.md            # Main project documentation
 └── requirements.txt     # Python dependencies
 
+
 > ⚠️ **Note on Model Weights:** Due to GitHub's file size limitations, the trained weights for the **WELFake**, **ISOT**, and **Hybrid Fusion** models are hosted on Google Drive. 
-> 
-> 🔗 **[Access Trained Models Here](https://drive.google.com/drive/folders/17rkrKPKLdCeyllKBnYh1QMlE8Q3CcFMQ?usp=sharing)**
-> 
+ 
+[Access Trained Models Here](https://drive.google.com/drive/folders/17rkrKPKLdCeyllKBnYh1QMlE8Q3CcFMQ?usp=sharing)
+ 
